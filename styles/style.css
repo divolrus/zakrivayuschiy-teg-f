@@ -36,10 +36,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  /*padding-inline-start: 14px;
-  padding-inline-end: 14px;
-  padding-block-start: 130px;
-  padding-block-end: 20px;*/
   margin-block-start: 100px;
   margin-block-end: 95px;
   padding: 130px 20px 108px;
@@ -48,7 +44,7 @@
 .header__logo {
   font-family: var(--font-accent);
   font-size: var(--logo-size);
-  font-variation-settings: "wght" var(--font-weight-bold);
+  font-weight: 400;
   text-transform: uppercase;
   line-height: normal;
   margin-block-end: 24px;
@@ -76,7 +72,7 @@
 
 .card__title {
   font-size: var(--text-size);
-  font-variation-settings: "wght" var(--heading-font-weight, 700);
+  font-variation-settings: "wght" var(--font-weight-bold);
   line-height: normal;
   padding: 5px 10px;
 }
@@ -97,15 +93,15 @@
   object-position: center;
 }
 
-.card__image_filter_warm {
+.card__image_filter_basical {
   filter: sepia(25%) saturate(120%) brightness(1.05);
 }
 
-.card__image_filter_mono {
+.card__image_filter_black {
   filter: grayscale(100%) contrast(110%);
 }
 
-.card__image_filter_alarm {
+.card__image_filter_colorful {
   filter: hue-rotate(300deg) saturate(200%) contrast(120%) brightness(0.9);
 }
 
@@ -148,13 +144,14 @@
     1px -1px var(--card-label-stroke-color, white);
 }
 
-@supports not (-webkit-text-stroke: 1px #000) {
-  .card__label {
-    text-shadow:
-      -1px -1px 0 var(--card-label-stroke-color),
-      1px -1px 0 var(--card-label-stroke-color),
-      -1px 1px 0 var(--card-label-stroke-color),
-      1px 1px 0 var(--card-label-stroke-color);
+@supports (
+  (text-stroke: 1px var(--text-color-shadow)) or
+    (-webkit-text-stroke: 1px var(--text-color-shadow))
+) {
+  .lable {
+    -webkit-text-stroke: 1px var(--text-color-shadow);
+    text-stroke: 1px var(--text-color-shadow);
+    text-shadow: none;
   }
 }
 
@@ -170,10 +167,9 @@
 .card__buttons {
   display: flex;
   justify-content: flex-end;
-  margin-right: 25px;
-  margin-bottom: 25px;
-  margin-top: -5px;
-  gap: 10px;
+  padding-right: 25px;
+  padding-bottom: 20px;
+  gap: 7px;
 }
 
 .card__icon-button {
@@ -187,12 +183,9 @@
   height: 38px;
 }
 
-.card__icon-button:focus {
-  outline: none;
-}
-
 .card__icon-button:focus-visible {
   border: 2px solid #000;
+  transition: 0.3s ease;
 }
 
 .like-icon {
@@ -208,24 +201,8 @@
 .card__like-button {
   position: relative;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  border: var(--button-border) solid #000;
-  background-color: #fff;
-  cursor: pointer;
   font-family: var(--font-accent);
-  font-variation-settings: "wght" var(--font-weight-bold);
-  font-size: 14px;
-  padding: 10px 35px;
-}
-
-.card__like-button:hover {
-  background-color: #000;
-}
-
-.card__like-button:focus-visible {
-  box-shadow: 2px 2px var(--border-color);
-  border-radius: 0;
+  min-width: 130px;
 }
 
 .button__text {
@@ -241,16 +218,48 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  border: var(--button-border) solid #000;
   gap: 8px;
   background-color: #fff;
   cursor: pointer;
   font-family: inherit;
   font-size: 14px;
-  font-variation-settings: "wght" var(--font-weight-bold);
+  font-family: var(--font-accent);
+  font-weight: 400;
+  transition: ease 0.3s;
 }
 
 .button:focus {
   outline: none;
+}
+
+.button:focus-visible {
+  box-shadow: 2px 2px var(--border-color, black);
+}
+
+.button::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--border-color, black);
+  transition: 0.5s ease-in-out;
+  transform-origin: left;
+  transform: scaleX(0);
+}
+
+.button:hover::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: var(--border-color, black);
+  transition: 0.5s ease-in-out;
+  transform: scale(1);
 }
 
 .button__svg {
@@ -262,19 +271,10 @@
 
 .main__save-button {
   display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 8px;
-  position: relative;
   width: 337px;
   min-height: 53px;
   margin: 0 auto;
-  overflow: hidden;
   padding: 10px;
-}
-
-.main__save-button:focus-visible {
-  box-shadow: 2px 2px var(--border-color);
   transition: ease 0.3s;
 }
 
@@ -294,7 +294,7 @@
 }
 
 .dialog::backdrop {
-  background-color: rgb(0 0 0 / 0.7);
+  background-color: rgb(0 0 0 / 0.75);
 }
 
 .box {
